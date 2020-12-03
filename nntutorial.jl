@@ -57,7 +57,7 @@ end
 function graddescsim(x_vals,f,f_cost,x,α,j,anim_name;fps_val=10)
     y_vals = [f(x) for x in x_vals];
     DF = graddescDF(f,f_cost,x,α,j);
-    p = plot(x_vals,y_vals,legend=false,title=L"\alpha = %$α");
+    p = plot(x_vals,y_vals,legend=false,title=L"\alpha = %$α, x_0 = %$x");
     anim = @animate for i ∈ 1:nrow(DF)
         plot!(p,DF[1:i,1],DF[1:i,2],m=:dot);
     end
