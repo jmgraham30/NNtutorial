@@ -118,6 +118,14 @@ git-tree-sha1 = "71d874f2e97bf01dc5c44d562cea30cc7ebb81d1"
 uuid = "66a33bbf-0c2b-5fc8-a008-9da813334f0a"
 version = "0.5.5"
 
+[[MLPreprocessing]]
+deps = ["DataFrames", "LearnBase", "Statistics", "StatsBase"]
+git-tree-sha1 = "eaa8cdc2f47c6a3ce884a8b23742c6913a2ec246"
+repo-rev = "master"
+repo-url = "https://github.com/JuliaML/MLPreprocessing.jl"
+uuid = "270893ea-b48f-5b4f-bac8-adb34c91318c"
+version = "0.0.0"
+
 [[MappedArrays]]
 deps = ["FixedPointNumbers"]
 git-tree-sha1 = "b92bd220c95a8bbe89af28f11201fd080e0e3fe7"
