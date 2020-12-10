@@ -1,0 +1,74 @@
+---
+title: "MNIST Data"
+output: html_notebook
+---
+
+```{r,message=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(reticulate)
+theme_set(theme_light())
+```
+
+```{r}
+use_python("/usr/local/Caskroom/miniconda/base/envs/r-reticulate/bin/python")
+use_condaenv(condaenv = "r-reticulate")
+```
+
+```{r}
+skl_data <- import("sklearn.datasets")
+digits <- skl_data$load_digits()
+```
+
+```{r}
+digits_data <- digits$data
+digits_targets <- digits$target
+digits_images <- digits$images
+```
+
+
+```{r}
+dim(digits_data)
+```
+
+```{r}
+length(digits_targets)
+```
+
+```{r}
+reshape2::melt(t(digits_images[1, , ])) %>%
+  ggplot(aes(x=Var1,y=Var2,fill=value)) + 
+  geom_raster() + scale_fill_continuous(type = "viridis")
+```
+
+```{r}
+digits_data_scaled <- scale(digits_data)
+```
+
+```{r}
+digits_data_scaled[1, ]
+```
+
+```{r}
+df <- data.frame(digits_data_scaled)
+df <- df %>% mutate(Y=digits_targets) 
+```
+
+```{r}
+df_split <- initial_split(df,prop=0.6,strata = Y)
+df_train <- training(df_split)
+df_test <- testing(df_split)
+```
+
+
+```{r}
+x_train <- df_train %>% select(-Y)
+y_train <- df_train$Y
+x_test <- df_test %>% select(-Y)
+y_test <- df_test$Y
+```
+
+```{r}
+all_data <- list(digits_data=digits_data,digits_targets=digits_targets,digits_images=digits_images,df=df,x_train=x_train,y_train=y_train,x_test=x_test,y_test=y_test)
+```
+
