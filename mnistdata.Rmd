@@ -72,3 +72,21 @@ y_test <- df_test$Y
 all_data <- list(digits_data=digits_data,digits_targets=digits_targets,digits_images=digits_images,df=df,x_train=x_train,y_train=y_train,x_test=x_test,y_test=y_test)
 ```
 
+```{r}
+set_to_one <- function(n){
+  x <- rep(0,10)
+  x[n+1] <- 1
+  return(x)
+}
+```
+
+```{r}
+y_v_train <- map(y_train,set_to_one)
+y_v_test <- map(y_test,set_to_one)
+```
+
+```{r}
+(y_train[1])
+(y_v_train[[1]])
+```
+

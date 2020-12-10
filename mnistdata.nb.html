@@ -1893,9 +1893,9 @@ digits_images &lt;- digits$images</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgPC0gZGF0YS5mcmFtZShkaWdpdHNfZGF0YV9zY2FsZWQpXG5kZiA8LSBkZiAlPiUgbXV0YXRlKFk9ZGlnaXRzX3RhcmdldHMpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgPC0gZGF0YS5mcmFtZShkaWdpdHNfZGF0YV9zY2FsZWQpXG5kZiA8LSBkZiAlPiUgbXV0YXRlKFk9ZGlnaXRzX3RhcmdldHMpIFxuYGBgIn0= -->
 <pre class="r"><code>df &lt;- data.frame(digits_data_scaled)
-df &lt;- df %&gt;% mutate(Y=digits_targets)</code></pre>
+df &lt;- df %&gt;% mutate(Y=digits_targets) </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1926,8 +1926,43 @@ y_test &lt;- df_test$Y</code></pre>
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0X3RvX29uZSA8LSBmdW5jdGlvbihuKXtcbiAgeCA8LSByZXAoMCwxMClcbiAgeFtuKzFdIDwtIDFcbiAgcmV0dXJuKHgpXG59XG5gYGAifQ== -->
+<pre class="r"><code>set_to_one &lt;- function(n){
+  x &lt;- rep(0,10)
+  x[n+1] &lt;- 1
+  return(x)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueV92X3RyYWluIDwtIG1hcCh5X3RyYWluLHNldF90b19vbmUpXG55X3ZfdGVzdCA8LSBtYXAoeV90ZXN0LHNldF90b19vbmUpXG5gYGAifQ== -->
+<pre class="r"><code>y_v_train &lt;- map(y_train,set_to_one)
+y_v_test &lt;- map(y_test,set_to_one)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKHlfdHJhaW5bMV0pXG5gYGAifQ== -->
+<pre class="r"><code>(y_train[1])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDFcbiJ9 -->
+<pre><code>[1] 1</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKHlfdl90cmFpbltbMV1dKVxuYGBgIn0= -->
+<pre class="r"><code>(y_v_train[[1]])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAwIDEgMCAwIDAgMCAwIDAgMCAwXG4ifQ== -->
+<pre><code> [1] 0 1 0 0 0 0 0 0 0 0</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiTU5JU1QgRGF0YSIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3IsbWVzc2FnZT1GQUxTRX0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkodGlkeW1vZGVscykKbGlicmFyeShyZXRpY3VsYXRlKQp0aGVtZV9zZXQodGhlbWVfbGlnaHQoKSkKYGBgCgpgYGB7cn0KdXNlX3B5dGhvbigiL3Vzci9sb2NhbC9DYXNrcm9vbS9taW5pY29uZGEvYmFzZS9lbnZzL3ItcmV0aWN1bGF0ZS9iaW4vcHl0aG9uIikKdXNlX2NvbmRhZW52KGNvbmRhZW52ID0gInItcmV0aWN1bGF0ZSIpCmBgYAoKYGBge3J9CnNrbF9kYXRhIDwtIGltcG9ydCgic2tsZWFybi5kYXRhc2V0cyIpCmRpZ2l0cyA8LSBza2xfZGF0YSRsb2FkX2RpZ2l0cygpCmBgYAoKYGBge3J9CmRpZ2l0c19kYXRhIDwtIGRpZ2l0cyRkYXRhCmRpZ2l0c190YXJnZXRzIDwtIGRpZ2l0cyR0YXJnZXQKZGlnaXRzX2ltYWdlcyA8LSBkaWdpdHMkaW1hZ2VzCmBgYAoKCmBgYHtyfQpkaW0oZGlnaXRzX2RhdGEpCmBgYAoKYGBge3J9Cmxlbmd0aChkaWdpdHNfdGFyZ2V0cykKYGBgCgpgYGB7cn0KcmVzaGFwZTI6Om1lbHQodChkaWdpdHNfaW1hZ2VzWzEsICwgXSkpICU+JQogIGdncGxvdChhZXMoeD1WYXIxLHk9VmFyMixmaWxsPXZhbHVlKSkgKyAKICBnZW9tX3Jhc3RlcigpICsgc2NhbGVfZmlsbF9jb250aW51b3VzKHR5cGUgPSAidmlyaWRpcyIpCmBgYAoKYGBge3J9CmRpZ2l0c19kYXRhX3NjYWxlZCA8LSBzY2FsZShkaWdpdHNfZGF0YSkKYGBgCgpgYGB7cn0KZGlnaXRzX2RhdGFfc2NhbGVkWzEsIF0KYGBgCgpgYGB7cn0KZGYgPC0gZGF0YS5mcmFtZShkaWdpdHNfZGF0YV9zY2FsZWQpCmRmIDwtIGRmICU+JSBtdXRhdGUoWT1kaWdpdHNfdGFyZ2V0cykgCmBgYAoKYGBge3J9CmRmX3NwbGl0IDwtIGluaXRpYWxfc3BsaXQoZGYscHJvcD0wLjYsc3RyYXRhID0gWSkKZGZfdHJhaW4gPC0gdHJhaW5pbmcoZGZfc3BsaXQpCmRmX3Rlc3QgPC0gdGVzdGluZyhkZl9zcGxpdCkKYGBgCgoKYGBge3J9CnhfdHJhaW4gPC0gZGZfdHJhaW4gJT4lIHNlbGVjdCgtWSkKeV90cmFpbiA8LSBkZl90cmFpbiRZCnhfdGVzdCA8LSBkZl90ZXN0ICU+JSBzZWxlY3QoLVkpCnlfdGVzdCA8LSBkZl90ZXN0JFkKYGBgCgpgYGB7cn0KYWxsX2RhdGEgPC0gbGlzdChkaWdpdHNfZGF0YT1kaWdpdHNfZGF0YSxkaWdpdHNfdGFyZ2V0cz1kaWdpdHNfdGFyZ2V0cyxkaWdpdHNfaW1hZ2VzPWRpZ2l0c19pbWFnZXMsZGY9ZGYseF90cmFpbj14X3RyYWluLHlfdHJhaW49eV90cmFpbix4X3Rlc3Q9eF90ZXN0LHlfdGVzdD15X3Rlc3QpCmBgYAoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiTU5JU1QgRGF0YSIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3IsbWVzc2FnZT1GQUxTRX0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkodGlkeW1vZGVscykKbGlicmFyeShyZXRpY3VsYXRlKQp0aGVtZV9zZXQodGhlbWVfbGlnaHQoKSkKYGBgCgpgYGB7cn0KdXNlX3B5dGhvbigiL3Vzci9sb2NhbC9DYXNrcm9vbS9taW5pY29uZGEvYmFzZS9lbnZzL3ItcmV0aWN1bGF0ZS9iaW4vcHl0aG9uIikKdXNlX2NvbmRhZW52KGNvbmRhZW52ID0gInItcmV0aWN1bGF0ZSIpCmBgYAoKYGBge3J9CnNrbF9kYXRhIDwtIGltcG9ydCgic2tsZWFybi5kYXRhc2V0cyIpCmRpZ2l0cyA8LSBza2xfZGF0YSRsb2FkX2RpZ2l0cygpCmBgYAoKYGBge3J9CmRpZ2l0c19kYXRhIDwtIGRpZ2l0cyRkYXRhCmRpZ2l0c190YXJnZXRzIDwtIGRpZ2l0cyR0YXJnZXQKZGlnaXRzX2ltYWdlcyA8LSBkaWdpdHMkaW1hZ2VzCmBgYAoKCmBgYHtyfQpkaW0oZGlnaXRzX2RhdGEpCmBgYAoKYGBge3J9Cmxlbmd0aChkaWdpdHNfdGFyZ2V0cykKYGBgCgpgYGB7cn0KcmVzaGFwZTI6Om1lbHQodChkaWdpdHNfaW1hZ2VzWzEsICwgXSkpICU+JQogIGdncGxvdChhZXMoeD1WYXIxLHk9VmFyMixmaWxsPXZhbHVlKSkgKyAKICBnZW9tX3Jhc3RlcigpICsgc2NhbGVfZmlsbF9jb250aW51b3VzKHR5cGUgPSAidmlyaWRpcyIpCmBgYAoKYGBge3J9CmRpZ2l0c19kYXRhX3NjYWxlZCA8LSBzY2FsZShkaWdpdHNfZGF0YSkKYGBgCgpgYGB7cn0KZGlnaXRzX2RhdGFfc2NhbGVkWzEsIF0KYGBgCgpgYGB7cn0KZGYgPC0gZGF0YS5mcmFtZShkaWdpdHNfZGF0YV9zY2FsZWQpCmRmIDwtIGRmICU+JSBtdXRhdGUoWT1kaWdpdHNfdGFyZ2V0cykgCmBgYAoKYGBge3J9CmRmX3NwbGl0IDwtIGluaXRpYWxfc3BsaXQoZGYscHJvcD0wLjYsc3RyYXRhID0gWSkKZGZfdHJhaW4gPC0gdHJhaW5pbmcoZGZfc3BsaXQpCmRmX3Rlc3QgPC0gdGVzdGluZyhkZl9zcGxpdCkKYGBgCgoKYGBge3J9CnhfdHJhaW4gPC0gZGZfdHJhaW4gJT4lIHNlbGVjdCgtWSkKeV90cmFpbiA8LSBkZl90cmFpbiRZCnhfdGVzdCA8LSBkZl90ZXN0ICU+JSBzZWxlY3QoLVkpCnlfdGVzdCA8LSBkZl90ZXN0JFkKYGBgCgpgYGB7cn0KYWxsX2RhdGEgPC0gbGlzdChkaWdpdHNfZGF0YT1kaWdpdHNfZGF0YSxkaWdpdHNfdGFyZ2V0cz1kaWdpdHNfdGFyZ2V0cyxkaWdpdHNfaW1hZ2VzPWRpZ2l0c19pbWFnZXMsZGY9ZGYseF90cmFpbj14X3RyYWluLHlfdHJhaW49eV90cmFpbix4X3Rlc3Q9eF90ZXN0LHlfdGVzdD15X3Rlc3QpCmBgYAoKYGBge3J9CnNldF90b19vbmUgPC0gZnVuY3Rpb24obil7CiAgeCA8LSByZXAoMCwxMCkKICB4W24rMV0gPC0gMQogIHJldHVybih4KQp9CmBgYAoKYGBge3J9Cnlfdl90cmFpbiA8LSBtYXAoeV90cmFpbixzZXRfdG9fb25lKQp5X3ZfdGVzdCA8LSBtYXAoeV90ZXN0LHNldF90b19vbmUpCmBgYAoKYGBge3J9Cih5X3RyYWluWzFdKQooeV92X3RyYWluW1sxXV0pCmBgYAoK</div>
 
 
 
