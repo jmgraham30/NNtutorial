@@ -4,6 +4,9 @@ using LinearAlgebra, DataFrames, Plots, StatsPlots, LaTeXStrings;
 
 export factivate, simpleloopednncal, matrixnncal, graddescDF, graddescsim
 
+"""
+``f(x) = \frac{1}{1+e^{-x}}``
+"""
 factivate(x) = 1.0/(1.0 + exp(-x));
 
 function simpleloopednncal(n_layers,x,w,b)
