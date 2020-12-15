@@ -1,6 +1,6 @@
 module nntutorial
 
-using LinearAlgebra, DataFrames, Plots, StatsPlots, LaTeXStrings;
+using Random, LinearAlgebra, DataFrames, Plots, StatsPlots, LaTeXStrings;
 
 export factivate, factivateprime, simpleloopednncal, matrixnncal, graddescDF, graddescsim
 
