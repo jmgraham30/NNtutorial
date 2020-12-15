@@ -2,12 +2,17 @@ module nntutorial
 
 using LinearAlgebra, DataFrames, Plots, StatsPlots, LaTeXStrings;
 
-export factivate, simpleloopednncal, matrixnncal, graddescDF, graddescsim
+export factivate, factivateprime, simpleloopednncal, matrixnncal, graddescDF, graddescsim
 
 """
 ``f(x) = \\frac{1}{1+e^{-x}}``
 """
 factivate(x) = 1.0/(1.0 + exp(-x));
+
+"""
+``f'(x)`` for ``f(x) = \\frac{1}{1+e^{-x}}``
+"""
+factivateprime(x) = factivate(x)*(1-factivate(x))
 
 function simpleloopednncal(n_layers,x,w,b)
     h = zeros(length(w));
@@ -65,6 +70,26 @@ function graddescsim(x_vals,f,f_cost,x,α,j,anim_name;fps_val=10)
         plot!(p,DF[1:i,1],DF[1:i,2],m=:dot);
     end
     gif(anim, anim_name, fps = fps_val);
+end
+
+function setup_init_weights(nn_structure)
+    W = Dict();
+    b = Dict();
+    for l = 2:length(nn_structure)
+        push!(W,string(l)=>randn(nn_structure[l],nn_structure[l-1]))
+        push!(b,string(l)=>randn(nn_structure[l]))
+    end
+    return W, b
+end
+
+function init_tri_values(nn_structure)
+    tri_W = Dict();
+    tri_b = Dict();
+    for l = 2:length(nn_structure)
+        push!(tri_W,string(l)=>zeros(nn_structure[l],nn_structure[l-1]))
+        push!(tri_b,string(l)=>zeros(nn_structure[l]))
+    end
+    return tri_W, tri_b
 end
 
 end
