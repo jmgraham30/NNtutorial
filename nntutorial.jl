@@ -3,7 +3,7 @@ module nntutorial
 using Random, LinearAlgebra, DataFrames, Plots, StatsPlots, LaTeXStrings;
 
 export factivate, factivateprime, simpleloopednncal, matrixnncal, graddescDF, graddescsim
-export setup_init_weights, init_tri_values
+export setup_init_weights, init_tri_values, calculate_out_layer_delta, calculate_hidden_delta
 
 """
 ``f(x) = \\frac{1}{1+e^{-x}}``
@@ -91,6 +91,30 @@ function init_tri_values(nn_structure)
         push!(tri_b,l=>zeros(nn_structure[l]))
     end
     return tri_W, tri_b
+end
+
+function feed_forward(x, W, b)
+    h = Dict(2=>x);
+    z = Dict();
+    node_in = 0.0;
+    for l = 2:length(keys(W))+1
+        if 1 == 2
+            node_in = x;
+        else
+            node_in = h[l];
+        end
+        z[l+1] = W[l]*node_in .+ b[l];
+        h[l+1] = factivate.(z[l+1]);
+    end
+    return h, z
+end
+
+function calculate_out_layer_delta(y,h_out,z_out)
+    return -(y .- h_out).*factivateprime.(z_out)
+end
+
+function calculate_hidden_delta(delta_plus_1,w_l,z_l)
+    return w_l'*delta_plus_1 .* factivateprime.(z_l)
 end
 
 end
