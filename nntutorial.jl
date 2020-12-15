@@ -3,6 +3,7 @@ module nntutorial
 using Random, LinearAlgebra, DataFrames, Plots, StatsPlots, LaTeXStrings;
 
 export factivate, factivateprime, simpleloopednncal, matrixnncal, graddescDF, graddescsim
+export setup_init_weights, init_tri_values
 
 """
 ``f(x) = \\frac{1}{1+e^{-x}}``
@@ -76,8 +77,8 @@ function setup_init_weights(nn_structure)
     W = Dict();
     b = Dict();
     for l = 2:length(nn_structure)
-        push!(W,string(l)=>randn(nn_structure[l],nn_structure[l-1]))
-        push!(b,string(l)=>randn(nn_structure[l]))
+        push!(W,l=>randn(nn_structure[l],nn_structure[l-1]))
+        push!(b,l=>randn(nn_structure[l]))
     end
     return W, b
 end
@@ -86,8 +87,8 @@ function init_tri_values(nn_structure)
     tri_W = Dict();
     tri_b = Dict();
     for l = 2:length(nn_structure)
-        push!(tri_W,string(l)=>zeros(nn_structure[l],nn_structure[l-1]))
-        push!(tri_b,string(l)=>zeros(nn_structure[l]))
+        push!(tri_W,l=>zeros(nn_structure[l],nn_structure[l-1]))
+        push!(tri_b,l=>zeros(nn_structure[l]))
     end
     return tri_W, tri_b
 end
