@@ -43,6 +43,8 @@ reshape2::melt(t(digits_images[1, , ])) %>%
 
 ```{r}
 digits_data_scaled <- scale(digits_data)
+f <- function(x){ifelse(is.nan(x),0,x)}
+digits_data_scaled <- f(digits_data_scaled)
 ```
 
 ```{r}
@@ -90,3 +92,15 @@ y_v_test <- map(y_test,set_to_one)
 (y_v_train[[1]])
 ```
 
+```{r}
+mnist_data_list <- list(digits_data=digits_data,
+                     digits_data_scaled=digits_data_scaled,
+                     digits_targets=digits_targets,
+                     digits_images=digits_images,
+                     digits_df=df,
+                     x_train=x_train,
+                     y_train=y_train,
+                     x_test=x_test,
+                     y_test=y_test)
+saveRDS(mnist_data_list,"./mnist_r_data.Rds")
+```
