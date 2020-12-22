@@ -3,7 +3,7 @@ module nntutorial
 using Random, LinearAlgebra, DataFrames, Plots, StatsPlots, LaTeXStrings;
 
 export factivate, factivateprime, simpleloopednncal, matrixnncal, graddescDF, graddescsim
-export setup_init_weights, init_tri_values, calculate_out_layer_delta, calculate_hidden_delta
+export setup_init_weights, init_tri_values, calculate_out_layer_delta, calculate_hidden_delta, train_nn
 
 """
 ``f(x) = \\frac{1}{1+e^{-x}}``
@@ -115,6 +115,61 @@ end
 
 function calculate_hidden_delta(delta_plus_1,w_l,z_l)
     return w_l'*delta_plus_1 .* factivateprime.(z_l)
+end
+
+function do_something(nn_structure,X,y,W,b,tri_W,tri_b,avg_cost)
+    for i = 1:size(y)[1]
+            delta = Dict();
+            # perform the feed forward pass and return the stored h and z values, to be used in the
+            # gradient descent step
+            h, z = feed_forward(X[i, :], W, b);
+            # loop from nl-1 to 1 backpropagating the errors
+            for l=length(nn_structure)+1:-1:2
+                if l == length(nn_structure)+1
+                    delta[l] = calculate_out_layer_delta(y[i,:], h[l], z[l]);
+                    avg_cost = avg_cost + norm((y[i,:]-h[l]));
+                else
+                    if l > 2
+                        delta[l] = calculate_hidden_delta(delta[l+1], W[l], z[l])
+                    end
+                    # triW^(l) = triW^(l) + delta^(l+1) * transpose(h^(l))
+                    tri_W[l] = tri_W[l] + reshape(delta[l+1],(size(delta[l+1])[1],1))*reshape(h[l],(size(h[l])[1],1))'; 
+                    # trib^(l) = trib^(l) + delta^(l+1)
+                    tri_b[l] = tri_b[l] + delta[l+1];
+                end
+            end
+    end
+    return avg_cost, tri_W, tri_b
+end
+
+function do_something_else(nn_structure,W,b,tri_W,tri_b,m,alpha)
+    for l = length(nn_structure):-1:2
+            W[l] = W[l] +  -alpha * (1.0/m * tri_W[l])
+            b[l] = b[l] +  -alpha * (1.0/m * tri_b[l])
+    end
+    return W, b
+end
+
+function train_nn(nn_structure, X, y; iter_num=3000, alpha=0.25)
+    W, b = setup_init_weights(nn_structure);
+    cnt = 0;
+    m = size(y)[1];
+    avg_cost_func = [];
+    println("Starting gradient descent for $iter_num iterations.")
+    while cnt < iter_num
+        if cnt%1000 == 0
+            println("Iteration $cnt of $iter_num iterations.")
+        end
+        tri_W, tri_b = init_tri_values(nn_structure);
+        avg_cost = 0;
+        avg_cost, tri_W, tri_b = do_something(nn_structure,X,y,W,b,tri_W,tri_b,avg_cost);
+        W, b = do_something_else(nn_structure,W,b,tri_W,tri_b,m,alpha);
+        # complete the average cost calculation
+        avg_cost = 1.0/m * avg_cost
+        append!(avg_cost_func,avg_cost)
+        cnt = cnt + 1;
+    end
+    return W, b, avg_cost_func
 end
 
 end
