@@ -3,7 +3,7 @@ module nntutorial
 using Random, LinearAlgebra, DataFrames, Plots, StatsPlots, LaTeXStrings;
 
 export factivate, factivateprime, simpleloopednncal, matrixnncal, graddescDF, graddescsim, convertytovect
-export setup_init_weights, init_tri_values, calculate_out_layer_delta, calculate_hidden_delta, train_nn
+export setup_init_weights, init_tri_values, calculate_out_layer_delta, calculate_hidden_delta, train_nn, predict_y
 
 """
 ``f(x) = \\frac{1}{1+e^{-x}}``
@@ -179,6 +179,16 @@ function train_nn(nn_structure, X, y; iter_num=3000, alpha=0.25)
         cnt = cnt + 1;
     end
     return W, b, avg_cost_func
+end
+
+function predict_y(W,b,X,n_layers)
+    m = size(X)[1];
+    y = zeros(m);
+    for i=1:m
+        h, z = feed_forward(X[i,:],W,b);
+        y[i] = argmax(h[n_layers+1]);
+    end
+    return y
 end
 
 end
