@@ -2,7 +2,7 @@ module nntutorial
 
 using Random, LinearAlgebra, DataFrames, Plots, StatsPlots, LaTeXStrings;
 
-export factivate, factivateprime, simpleloopednncal, matrixnncal, graddescDF, graddescsim
+export factivate, factivateprime, simpleloopednncal, matrixnncal, graddescDF, graddescsim, convertytovect
 export setup_init_weights, init_tri_values, calculate_out_layer_delta, calculate_hidden_delta, train_nn
 
 """
@@ -71,6 +71,15 @@ function graddescsim(x_vals,f,f_cost,x,α,j,anim_name;fps_val=10)
         plot!(p,DF[1:i,1],DF[1:i,2],m=:dot);
     end
     gif(anim, anim_name, fps = fps_val);
+end
+
+function convertytovect(y)
+    N = length(y);
+    yvect = zeros(N,10);
+    for i =1:N
+        yvect[i,y[i]+1] = 1;
+    end
+    return yvect
 end
 
 function setup_init_weights(nn_structure)
