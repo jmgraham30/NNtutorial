@@ -107,7 +107,7 @@ function feed_forward(x, W, b)
     z = Dict();
     node_in = 0.0;
     for l = 2:length(keys(W))+1
-        if 1 == 2
+        if l == 2
             node_in = x;
         else
             node_in = h[l];
