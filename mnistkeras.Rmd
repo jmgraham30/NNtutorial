@@ -1,0 +1,112 @@
+---
+title: "MNIST Keras"
+output: html_notebook
+---
+
+```{r,message=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(reticulate)
+library(keras)
+theme_set(theme_light())
+```
+
+```{r}
+use_python("/usr/local/Caskroom/miniconda/base/envs/r-reticulate/bin/python")
+use_condaenv(condaenv = "r-reticulate")
+```
+
+
+```{r}
+skl_data <- import("sklearn.datasets")
+digits <- skl_data$load_digits()
+```
+
+```{r}
+digits_data <- 1/255*(digits$data)
+digits_targets <- digits$target
+digits_images <- digits$images
+```
+
+
+```{r}
+df <- as.data.frame(digits_data)
+pred_names <- paste0(rep("x_",64),as.character(1:64),sep="")
+names(df) <- pred_names
+df <- tibble(df)
+df <- df %>% mutate(Class=as.factor(as.character(digits_targets)))
+```
+
+```{r}
+class_names <- c('zero',
+                'one',
+                'two',
+                'three',
+                'four', 
+                'five',
+                'six',
+                'seven',
+                'eight',
+                'nine')
+```
+
+
+```{r}
+par(mfcol=c(5,5))
+par(mar=c(0, 0, 1.5, 0), xaxs='i', yaxs='i')
+for (i in 1:25){
+  p <- reshape2::melt(t(digits_images[i, , ])) %>%
+  ggplot(aes(x=Var1,y=Var2,fill=value)) + 
+  geom_raster(show.legend = FALSE) + 
+  scale_fill_continuous(type = "viridis") + scale_y_reverse() + 
+  labs(x="",y="",title=as.character(class_names[digits_targets[i]+1]))
+  print(p)
+}
+```
+
+```{r}
+set.seed(1234)
+mnist_split <- initial_split(df)
+mnist_train <- training(mnist_split)
+mnist_test <- testing(mnist_split)
+```
+
+
+```{r}
+mnist_rec <- 
+  recipe(Class ~ ., data = mnist_train) %>%
+  step_BoxCox(all_predictors()) %>%
+  prep(training = mnist_train, retain = TRUE)
+```
+
+```{r}
+test_normalized <- bake(mnist_rec, new_data = mnist_test, all_predictors())
+```
+
+```{r}
+nnet_fit <-
+  mlp(epochs = 50, hidden_units = 30, activation = "relu") %>%
+  set_mode("classification") %>% 
+  # Also set engine-specific `verbose` argument to prevent logging the results: 
+  set_engine("keras", verbose = 0) %>%
+  fit(Class ~ ., data = bake(mnist_rec, new_data = NULL))
+```
+
+```{r}
+val_results <- 
+  mnist_test %>%
+  bind_cols(
+    predict(nnet_fit, new_data = test_normalized),
+    predict(nnet_fit, new_data = test_normalized, type = "prob")
+  )
+val_results %>% slice(1:5)
+```
+
+```{r}
+val_results %>% accuracy(truth = Class, .pred_class)
+```
+
+```{r}
+val_results %>% conf_mat(truth = Class, .pred_class)
+```
+
