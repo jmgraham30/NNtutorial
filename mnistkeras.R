@@ -1,5 +1,8 @@
 library(tidyverse)
 library(keras)
+library(reticulate)
+use_python("/usr/local/Caskroom/miniconda/base/envs/r-reticulate/bin/python")
+use_condaenv(condaenv = "r-reticulate")
 
 mnist <- dataset_mnist()
 
