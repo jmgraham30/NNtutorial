@@ -23,7 +23,7 @@ digits <- skl_data$load_digits()
 ```
 
 ```{r}
-digits_data <- 1/255*(digits$data)
+digits_data <- (digits$data)/max(digits$data)
 digits_targets <- digits$target
 digits_images <- digits$images
 ```
@@ -85,7 +85,7 @@ test_normalized <- bake(mnist_rec, new_data = mnist_test, all_predictors())
 
 ```{r}
 nnet_fit <-
-  mlp(epochs = 50, hidden_units = 30, activation = "relu") %>%
+  mlp(epochs = 20, hidden_units = 30, activation = "relu") %>%
   set_mode("classification") %>% 
   # Also set engine-specific `verbose` argument to prevent logging the results: 
   set_engine("keras", verbose = 0) %>%
