@@ -1,8 +1,10 @@
 library(tidyverse)
 library(keras)
 library(reticulate)
-use_python("/usr/local/Caskroom/miniconda/base/envs/r-reticulate/bin/python")
-use_condaenv(condaenv = "r-reticulate")
+#use_python("/usr/local/Caskroom/miniconda/base/envs/r-reticulate/bin/python")
+#use_condaenv(condaenv = "r-reticulate")
+use_python("/usr/local/Caskroom/miniconda/base/envs/tf_env")
+use_condaenv(condaenv = "tf_env")
 
 mnist <- dataset_mnist()
 
@@ -72,7 +74,7 @@ model %>% fit(train_images, train_labels, epochs = 20, verbose = 2)
 
 score <- model %>% evaluate(test_images, test_labels, verbose = 0)
 
-cat('Test accuracy:', score[2], "\n")
+cat('Test accuracy:', score[[2]], "\n")
 
 predictions <- model %>% predict(test_images)
 
